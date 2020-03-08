@@ -17,4 +17,12 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    Add16(a[0]=true, a[1..15]=false, b=xOut, out=adderOut);
+    Mux16(a=xOut, b=adderOut, sel=inc, out=incOut);
+    
+    Mux16(a=incOut, b=in, sel=load, out=loadOut);
+    
+    Mux16(a=loadOut, b=false, sel=reset, out=resetOut);
+
+    DFF16(in=resetOut, out=xOut, out=out);
 }

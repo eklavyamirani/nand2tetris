@@ -16,4 +16,43 @@ CHIP RAM8 {
 
     PARTS:
     // Put your code here:
+
+    Not(in=address[0], out=notA0);
+    Not(in=address[1], out=notA1);
+    Not(in=address[2], out=notA2);
+
+    // Register 0
+    And4Way(a=notA2, b=notA1, c=notA0, d=load, out=sel0);
+    Register(in=in, load=sel0, out=out0);
+
+    // Register 1
+    And4Way(a=notA2, b=notA1, c=address[0], d=load, out=sel1);
+    Register(in=in, load=sel1, out=out1);
+
+    // Register 2
+    And4Way(a=notA2, b=address[1], c=notA0, d=load, out=sel2);
+    Register(in=in, load=sel2, out=out2);
+
+    // Register 3
+    And4Way(a=notA2, b=address[1], c=address[0], d=load, out=sel3);
+    Register(in=in, load=sel3, out=out3);
+
+    // Register 4
+    And4Way(a=address[2], b=notA1, c=notA0, d=load, out=sel4);
+    Register(in=in, load=sel4, out=out4);
+
+    // Register 5
+    And4Way(a=address[2], b=notA1, c=address[0], d=load, out=sel5);
+    Register(in=in, load=sel5, out=out5);
+
+    // Register 6
+    And4Way(a=address[2], b=address[1], c=notA0, d=load, out=sel6);
+    Register(in=in, load=sel6, out=out6);
+
+    // Register 7
+    And4Way(a=address[2], b=address[1], c=address[0], d=load, out=sel7);
+    Register(in=in, load=sel7, out=out7);
+
+    // MUX
+    Mux8Way16(a=out0, b=out1, c=out2, d=out3, e=out4, f=out5, g=out6, h=out7, sel=address, out=out);
 }

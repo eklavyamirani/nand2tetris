@@ -1,0 +1,14 @@
+/*
+    out = 1 if a = b = c = d = 1,
+    out = 0 otherwise
+*/
+CHIP And4Way {
+    IN a, b, c, d;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    And(a=a, b=b, out=abOut);
+    And(a=c, b=d, out=cdOut);
+    And(a=abOut, b=cdOut, out=out);
+}
