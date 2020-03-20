@@ -11,47 +11,47 @@
  */
 
 CHIP RAM16K {
-    IN in[16], load, address[15];
+    IN in[16], load, address[14];
     OUT out[16];
 
     PARTS:
     // Put your code here:
+    Not(in=address[11], out=notAddress11);
     Not(in=address[12], out=notAddress12);
     Not(in=address[13], out=notAddress13);
-    Not(in=address[14], out=notAddress14);
 
     // RAM 0
-    And4Way(a=notAddress14, b=notAddress13, c=notAddress12, d=load, out=sel0);
+    And4Way(a=notAddress13, b=notAddress12, c=notAddress11, d=load, out=sel0);
     RAM4K(in=in, load=sel0, address=address[0..11], out=out0);
 
     // RAM 1
-    And4Way(a=notAddress14, b=notAddress13, c=address[12], d=load, out=sel1);
+    And4Way(a=notAddress13, b=notAddress12, c=address[11], d=load, out=sel1);
     RAM4K(in=in, load=sel1, address=address[0..11], out=out1);
 
     // RAM 2
-    And4Way(a=notAddress14, b=address[13], c=notAddress12, d=load, out=sel2);
+    And4Way(a=notAddress13, b=address[12], c=notAddress11, d=load, out=sel2);
     RAM4K(in=in, load=sel2, address=address[0..11], out=out2);
 
     // RAM 3
-    And4Way(a=notAddress14, b=address[13], c=address[12], d=load, out=sel3);
+    And4Way(a=notAddress13, b=address[12], c=address[11], d=load, out=sel3);
     RAM4K(in=in, load=sel3, address=address[0..11], out=out3);
 
     // RAM 4
-    And4Way(a=address[14], b=notAddress13, c=notAddress12, d=load, out=sel4);
+    And4Way(a=address[13], b=notAddress12, c=notAddress11, d=load, out=sel4);
     RAM4K(in=in, load=sel4, address=address[0..11], out=out4);
 
     // RAM 5
-    And4Way(a=address[14], b=notAddress13, c=address[12], d=load, out=sel5);
+    And4Way(a=address[13], b=notAddress12, c=address[11], d=load, out=sel5);
     RAM4K(in=in, load=sel5, address=address[0..11], out=out5);
 
     // RAM 6
-    And4Way(a=address[14], b=address[13], c=notAddress12, d=load, out=sel6);
+    And4Way(a=address[13], b=address[12], c=notAddress11, d=load, out=sel6);
     RAM4K(in=in, load=sel6, address=address[0..11], out=out6);
 
     // RAM 7
-    And4Way(a=address[14], b=address[13], c=address[12], d=load, out=sel7);
+    And4Way(a=address[13], b=address[12], c=address[11], d=load, out=sel7);
     RAM4K(in=in, load=sel7, address=address[0..11], out=out7);
 
     // MUX
-    Mux8Way16(a=out0, b=out1, c=out2, d=out3, e=out4, f=out5, g=out6, h=out7, sel=address[12..14], out=out);
+    Mux8Way16(a=out0, b=out1, c=out2, d=out3, e=out4, f=out5, g=out6, h=out7, sel=address[11..13], out=out);
 }
