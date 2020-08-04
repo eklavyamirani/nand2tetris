@@ -1,0 +1,17 @@
+// Takes in an 8 bit input and 
+// applies a logical AND on these 8 bits
+CHIP And8Way {
+    IN input[8];
+    OUT output;
+    
+    PARTS:
+    // implementation
+    And(a=input[0], b=input[1], out=out1);
+    And(a=input[1], b=out0, out=out1);
+    And(a=input[2], b=out1, out=out2);
+    And(a=input[3], b=out2, out=out3);
+    And(a=input[4], b=out3, out=out4);
+    And(a=input[5], b=out4, out=out5);
+    And(a=input[6], b=out5, out=out6);
+    And(a=input[7], b=out6, out=out);
+}
