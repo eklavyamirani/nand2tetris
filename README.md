@@ -6,7 +6,8 @@ This project is for the homework exercises for [nand2tetris](https://www.nand2te
 1. Build the docker container:
 docker build -t simulator . 
 2. docker run -it simulator:latest bash
-3. To test the chip run:
- docker run -t simulator:latest /bin/sh -c "./tools/HardwareSimulator.sh <<path to .tst for the project>>"
+3. To test a chip run:
+ 
+   docker run -t simulator:latest /bin/sh -c "./tools/HardwareSimulator.sh <<path to .tst for the project>>"
  
    e.g.  docker run -t simulator:latest /bin/sh -c "./tools/HardwareSimulator.sh ./projects/05/CPU.tst"
