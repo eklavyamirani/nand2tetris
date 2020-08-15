@@ -1,6 +1,6 @@
 # nand2tetris
 
-This project is for the homework exercises for nand2tetris
+This project is for the homework exercises for [nand2tetris](https://www.nand2tetris.org)
 
 # How to use the project to simulate chips
 1. Build the docker container:
