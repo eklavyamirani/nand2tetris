@@ -103,10 +103,17 @@ CHIP CPU {
     ALU(x=registerD, y=selectedRegister, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=AluOut, zr=zrALU, ng=ngALU);
 
     // Program counter
-    Inc16(in[0..14]=internalPC, in[15]=false, out=pcAdderOutput);
-    Mux16(a=pcAdderOutput, b=false, sel=reset, out=pcResetOutput);
-    Not(in=reset, out=notReset);
-    And(a=notReset, b=JMPIfC, out=pcJMPSelect);
-    Mux16(a=pcResetOutput, b=registerA, b[15]=false, sel=pcJMPSelect, out[0..14]=internalPCTemp);
-    Register(in[0..14]=internalPCTemp, in[15]=false, load=true, out[0..14]=internalPC, out[0..14]=pc);
+
+    // // Inc16(in[0..14]=internalPC, in[15]=false, out=pcAdderOutput);
+    // // Mux16(a=pcAdderOutput, b=false, sel=reset, out=pcResetOutput);
+    // // Not(in=reset, out=notReset);
+    // // And(a=notReset, b=JMPIfC, out=pcJMPSelect);
+    // // Mux16(a=pcResetOutput, b=registerA, b[15]=false, sel=pcJMPSelect, out[0..14]=internalPCTemp);
+    // // Register(in[0..14]=internalPCTemp, in[15]=false, load=true, out[0..14]=internalPC, out[0..14]=pc);
+    
+    // * The above implementation of PC works, but for hardware simulator testing of the final computer
+    // * the simulator requires using the built in PC chip. 
+    Nand(a=JMPIfC, b=reset, out=inc);
+    Mux16(a[0..14]=internalPC, a[15]=false, b=registerA, sel=JMPIfC, out=pcInput);
+    PC(in=pcInput, load=JMPIfC, inc=inc, reset=reset, out[0..14]=pc, out[0..14]=internalPC);
 }
