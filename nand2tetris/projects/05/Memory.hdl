@@ -33,7 +33,6 @@ CHIP Memory {
     And(a=isRAMAccess, b=load, out=isRAMLoad);
 
     RAM16K(in=in, load=isRAMLoad, address=address[0..13], out=memoryOut);
-    Mux16(a=in, b=memoryOut, sel=isRAMAccess, out=outRAM);
 
     // It is Screen if first and second MSB of address are 10X - 10X
     Not(in=address[13], out=notAddress13);
@@ -42,7 +41,7 @@ CHIP Memory {
     // HACK simulate ram 8k with a 16k ram
     RAM16K(in=in, load=isScreenLoad, address[0..12]=address[0..12], address[13]=false, out=screenOut);
 
-    Mux16(a=outRAM, b=screenOut, sel=isScreenAccess, out=outScreen);
+    Mux16(a=memoryOut, b=screenOut, sel=isScreenAccess, out=outScreen);
 
     // It is keyboard access if it is 0x6000 i.e. 110 0000 0000 0000
     And(a=address[14], b=address[13], out=isKeyboardAccess);
