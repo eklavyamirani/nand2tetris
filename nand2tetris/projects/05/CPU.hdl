@@ -57,9 +57,9 @@ CHIP CPU {
     And(a=isCinstruction, b=instruction[4], out=loadRegisterD);
     DRegister(in=AluOut, load=loadRegisterD, out=registerD);
 
-    // M output - if isCinstruction ^ d1
+    // M output - if isCinstruction ^ d3
     And(a=isCinstruction, b=instruction[3], out=writeM, out=isMOut);
-    Mux16(a=inM, b=registerD, sel=isMOut, out=outM);
+    Mux16(a=inM, b=AluOut, sel=isMOut, out=outM);
 
     // JMP
     // if j3 == 1 and not(ng) and not(zr), set JMP = 1
@@ -84,6 +84,9 @@ CHIP CPU {
     Or(a=j1Out, b=j2Out, out=jmpA);
     Or(a=jmpA, b=j3Out, out=JMP);
 
+    // JMP if C inst
+    And(a=isCinstruction, b=JMP, out = JMPIfC);
+
     // C operation
     // y = A if a == 0,
     // y = M if a == 1
@@ -107,7 +110,7 @@ CHIP CPU {
     Inc16(in[0..14]=internalPC, in[15]=false, out=pcAdderOutput);
     Mux16(a=pcAdderOutput, b=false, sel=reset, out=pcResetOutput);
     Not(in=reset, out=notReset);
-    And(a=notReset, b=JMP, out=pcJMPSelect);
-    Mux16(a=pcResetOutput, b=registerA, b[15]=false, sel=pcJMPSelect, out[0..14]=pc, out[0..14]=internalPCTemp);
-    Register(in[0..14]=internalPCTemp, in[15]=false, load=true, out[0..14]=internalPC);
+    And(a=notReset, b=JMPIfC, out=pcJMPSelect);
+    Mux16(a=pcResetOutput, b=registerA, b[15]=false, sel=pcJMPSelect, out[0..14]=internalPCTemp);
+    Register(in[0..14]=internalPCTemp, in[15]=false, load=true, out[0..14]=internalPC, out[0..14]=pc);
 }
