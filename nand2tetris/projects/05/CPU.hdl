@@ -48,7 +48,7 @@ CHIP CPU {
     Not(in=isAinstruction, out=isCinstruction); // replace isCinstructionWith instructin[15]
 
     // A register
-    Mux16(a=registerD, b[0..14]=instruction[0..14], b[15]=false, sel=isAinstruction, out=aRegisterInput);
+    Mux16(a=AluOut, b[0..14]=instruction[0..14], b[15]=false, sel=isAinstruction, out=aRegisterInput);
     And(a=isCinstruction, b=instruction[5], out=cinstLoadRegisterA);
     Or(a=cinstLoadRegisterA, b=isAinstruction, out=loadRegisterA);
     ARegister(in=aRegisterInput, load=loadRegisterA, out=registerA, out[0..14]=addressM);
@@ -100,11 +100,7 @@ CHIP CPU {
     // a = instruction[12]
     Mux16(a=registerA, b=inM, sel=instruction[12], out=selectedRegister);
     
-    ALU(x=registerD, y=selectedRegister, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=AluOut, zr=zrALUTemp, ng=ngALUTemp);
-    
-    // Add clocked chips to avoid unclocked feedback
-    DFF(in=zrALUTemp, out=zrALU);
-    DFF(in=ngALUTemp, out=ngALU);
+    ALU(x=registerD, y=selectedRegister, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=AluOut, zr=zrALU, ng=ngALU);
 
     // Program counter
     Inc16(in[0..14]=internalPC, in[15]=false, out=pcAdderOutput);
